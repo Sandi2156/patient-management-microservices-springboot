@@ -1,0 +1,12 @@
+package com.sandipanmahata.patient_service.repository;
+
+import com.sandipanmahata.patient_service.models.Patient;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface PatientRepository extends JpaRepository<Patient, UUID> {
+    boolean existsByEmail(String email);
+}
