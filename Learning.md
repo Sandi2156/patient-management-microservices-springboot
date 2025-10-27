@@ -37,4 +37,5 @@
 ## 27th October
 
 - Set up kafka consumer
-- 
+- Set up API gateway using spring reactive gateway dependency
+- Learnt how to write gateway configuration
