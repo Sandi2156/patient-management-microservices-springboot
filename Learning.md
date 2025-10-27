@@ -19,3 +19,17 @@
 - How to compile the proto file and use generated code in our application
 - How to make grpc call from insomnia
 - How to mark generated proto code as external root resources so that I can import in the code
+
+## 25th October
+
+- How to create grpc client
+- Performed service to service communication using grpc
+- set up kafka docker 
+- What does @Value annotations do
+- What is blocking stub
+
+## 26th October
+
+- How to start a kafka server in docker
+- Set up kafka producer in patient service
+- Used protobuf as a message format to communicate in kafka

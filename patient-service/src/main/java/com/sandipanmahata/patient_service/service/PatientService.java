@@ -5,6 +5,7 @@ import com.sandipanmahata.patient_service.dto.PatientResponseDTO;
 import com.sandipanmahata.patient_service.exception.DuplicateEmailException;
 import com.sandipanmahata.patient_service.exception.PatientNotFoundException;
 import com.sandipanmahata.patient_service.grpc.BillingServiceGrpcClient;
+import com.sandipanmahata.patient_service.kafka.KafkaProducer;
 import com.sandipanmahata.patient_service.mapper.PatientMapper;
 import com.sandipanmahata.patient_service.models.Patient;
 import com.sandipanmahata.patient_service.repository.PatientRepository;
@@ -18,10 +19,12 @@ import java.util.UUID;
 public class PatientService {
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer kafkaProducer) {
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<PatientResponseDTO> getPatients() {
@@ -39,6 +42,8 @@ public class PatientService {
         Patient patient = patientRepository.save(PatientMapper.toModel(patientRequestDTO));
 
         this.billingServiceGrpcClient.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
+
+        this.kafkaProducer.sendEvent(patient);
 
         return PatientMapper.toDTO(patient);
     }
