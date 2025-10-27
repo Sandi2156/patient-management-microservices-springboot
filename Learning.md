@@ -33,3 +33,8 @@
 - How to start a kafka server in docker
 - Set up kafka producer in patient service
 - Used protobuf as a message format to communicate in kafka
+
+## 27th October
+
+- Set up kafka consumer
+- 
