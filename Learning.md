@@ -39,3 +39,9 @@
 - Set up kafka consumer
 - Set up API gateway using spring reactive gateway dependency
 - Learnt how to write gateway configuration
+
+## 28th October
+
+- Learnt how to generate JWT token, validate token
+- Annotations: Bean, Component, Value, Configuration
+- Types: Optional
