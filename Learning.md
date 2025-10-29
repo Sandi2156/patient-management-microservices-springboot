@@ -23,7 +23,7 @@
 ## 25th October
 
 - How to create grpc client
-- Performed service to service communication using grpc
+- Performed service to service communi cation using grpc
 - set up kafka docker 
 - What does @Value annotations do
 - What is blocking stub
