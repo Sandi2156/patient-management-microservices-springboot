@@ -45,3 +45,7 @@
 - Learnt how to generate JWT token, validate token
 - Annotations: Bean, Component, Value, Configuration
 - Types: Optional
+
+## 30th October
+
+- Started learning **REST-assured** and **junit** for testing
