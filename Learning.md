@@ -49,3 +49,8 @@
 ## 30th October
 
 - Started learning **REST-assured** and **junit** for testing
+
+## 31st October
+
+- Started learning LocalStack
+- 
