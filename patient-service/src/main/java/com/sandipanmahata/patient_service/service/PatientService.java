@@ -1,5 +1,6 @@
 package com.sandipanmahata.patient_service.service;
 
+import com.sandipanmahata.patient_service.dto.PagedPatientResponseDTO;
 import com.sandipanmahata.patient_service.dto.PatientRequestDTO;
 import com.sandipanmahata.patient_service.dto.PatientResponseDTO;
 import com.sandipanmahata.patient_service.exception.DuplicateEmailException;
@@ -9,6 +10,10 @@ import com.sandipanmahata.patient_service.kafka.KafkaProducer;
 import com.sandipanmahata.patient_service.mapper.PatientMapper;
 import com.sandipanmahata.patient_service.models.Patient;
 import com.sandipanmahata.patient_service.repository.PatientRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,10 +32,34 @@ public class PatientService {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public List<PatientResponseDTO> getPatients() {
-        List<Patient> patients = patientRepository.findAll();
+    public PagedPatientResponseDTO getPatients(int page, int size, String sort, String sortField, String searchValue) {
 
-        return patients.stream().map(PatientMapper::toDTO).toList();
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                size,
+                sort.equalsIgnoreCase("desc") ? Sort.by(sortField).descending() : Sort.by(sortField).ascending()
+        );
+
+        Page<Patient> patientPage;
+
+        if(searchValue == null || searchValue.isBlank()) {
+            patientPage = patientRepository.findAll(pageable);
+        } else {
+            patientPage = patientRepository.findByNameContainingIgnoreCase(searchValue, pageable);
+        }
+
+        List<PatientResponseDTO> patientResponseDTOS = patientPage.getContent()
+                .stream()
+                .map(PatientMapper::toDTO)
+                .toList();
+
+        return new PagedPatientResponseDTO(
+                patientResponseDTOS,
+                patientPage.getNumber() + 1,
+                patientPage.getSize(),
+                patientPage.getTotalPages(),
+                (int) patientPage.getTotalElements()
+        );
     }
 
     public PatientResponseDTO addPatient(PatientRequestDTO patientRequestDTO) {
